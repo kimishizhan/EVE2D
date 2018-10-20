@@ -27,16 +27,15 @@ cc.Class({
         //         this._bar = value;
         //     }
         // },
-        Ship: cc.Node,
-        CargoUI: cc.Node,
-        OreCargoPrefab: cc.Prefab,
+        isOpen: Boolean,
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        this.node.on(cc.Node.EventType.TOUCH_START, this.onTouchStart, this);
-        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
+        this.isOpen=false;
+        this.node.active=false;
+        this.node.on(cc.Node.EventType.TOUCH_START, this.stopTouching, this);
     },
 
     start () {
@@ -45,31 +44,8 @@ cc.Class({
 
     // update (dt) {},
 
-    onTouchStart: function(event){
-        var touch = event.getLocation();
-        var touchInMap = this.node.getChildByName("Map").convertToNodeSpaceAR(touch);
-        var shipPosition = this.Ship.position;
-        console.log("Touch in Map:" + touchInMap);
-        console.log("Ship Position:" + shipPosition);
+    stopTouching: function(event){
 
-        this.Ship.getComponent("Ship").shipMove(touchInMap);
+        event.stopPropagation();
     },
-
-    onKeyDown: function(event){
-        switch(event.keyCode) {
-            case cc.macro.KEY.b:
-                console.log('Press B key');
-                this.CargoUI.active=!this.CargoUI.active;
-                break;
-        }
-    },
-
-    minedOre: function(){
-        console.log('装进货仓');
-        var newMinedOre = cc.instantiate(this.OreCargoPrefab);
-        //this.CargoUI.addChild(newMinedOre);
-        //console.log(this.CargoUI.getChildByName("layout"));
-        this.CargoUI.getChildByName("layout").addChild(newMinedOre);
-    },
-
 });

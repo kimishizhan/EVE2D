@@ -28,6 +28,7 @@ cc.Class({
         //     }
         // },
         ShipSpeed: 500,
+        MainCanvas: cc.Node,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -74,11 +75,13 @@ cc.Class({
         this.scheduleOnce(function() {
             this.node.getChildByName("MiningLaser").height = 50;
             targetOre.destroy();
+            this.MainCanvas.getComponent("MainCanvas").minedOre();
             console.log("采矿结束");
         }, 2);
 
         //转向矿石位置
         var rotation = cc.rotateTo(0,moveVectorFull.signAngle(cc.v2(0,-1))*180/Math.PI);
         this.node.runAction(rotation);
+
     },
 });
